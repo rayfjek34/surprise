@@ -101,34 +101,6 @@ html, body {
   margin: 0;
 }
 
-/* HEART BUTTON */
-.heart-button {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: #7C616C;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 20;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.35);
-  transition: transform 0.2s ease;
-}
-
-.heart-button:hover {
-  transform: scale(1.15);
-}
-
-.heart-button svg {
-  width: 40px;
-  height: 40px;
-  fill: #E5E9EC;
-}
-
 /* CURTAIN */
 .curtain {
   position: fixed;
@@ -150,11 +122,33 @@ html, body {
   font-size: clamp(2rem, 6vw, 4rem);
   text-align: center;
   font-weight: 800;
-  display: none; /* hidden initially */
+  display: none;
   z-index: 25;
 }
 
-/* ENVELOPE (hidden for now) */
+/* HEART BUTTON */
+.heart-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #7C616C;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 20;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.35);
+  transition: transform 0.2s ease;
+}
+
+.heart-button:hover { transform: scale(1.15); }
+
+.heart-button svg { width: 40px; height: 40px; fill: #E5E9EC; }
+
+/* ENVELOPE */
 .envelope-wrapper {
   position: fixed;
   top: 50%;
@@ -164,31 +158,71 @@ html, body {
   height: 300px;
   z-index: 26;
   display: none;
+  cursor: pointer;
 }
+.envelope-wrapper .envelope-text {
+  text-align: center;
+  margin-top: 10px;
+  color: rgba(229,233,236,0.3);
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* ENVELOPE STYLES */
+#envelope {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background: #F6E2B6;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease;
+}
+
+#envelope.open {
+  transform: rotateX(-180deg);
+}
+
+/* LETTER */
+.letter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.8s;
+}
+.letter.visible { opacity: 1; }
+
+.letter h1 { margin: 0; font-size: 1.8rem; color: #7C616C; }
+.letter h4 { margin: 5px 0 0 0; font-size: 1rem; color: #7C616C; }
 
 /* ANIMATION */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* MOBILE STACK */
 @media (max-width: 900px) {
-  .row {
-    flex-direction: column;
-  }
-
-  .photo {
-    width: 200px;
-    height: 200px;
-  }
+  .row { flex-direction: column; }
+  .photo { width: 200px; height: 200px; }
 }
 </style>
 </head>
-
 <body>
 
-<!-- SVG HEART DEFINITIONS -->
+<!-- HEART BACKGROUND -->
 <svg id="canvas" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
     <g id="heart">
@@ -210,11 +244,7 @@ html, body {
 <!-- CONTENT -->
 <div class="content">
   <div class="row">
-
-    <div class="photo">
-      <img src="photov1.jpeg" alt="Us together">
-    </div>
-
+    <div class="photo"><img src="photov1.jpeg" alt="Us together"></div>
     <div class="card">
       <div class="title">Hey ❤️</div>
       <p>
@@ -222,11 +252,7 @@ html, body {
         Nu voiam sa iti dai seama din prima ca vreau sa iti spun aici ca te iubesc si sunt norocos sa te am in viata mea, Guzelik!
       </p>
     </div>
-
-    <div class="photo">
-      <img src="photov2.jpeg" alt="Us together">
-    </div>
-
+    <div class="photo"><img src="photov2.jpeg" alt="Us together"></div>
   </div>
 </div>
 
@@ -235,19 +261,6 @@ html, body {
 
 <!-- FINAL MESSAGE -->
 <div class="final-message">Get your best dress today and get ready - we're going out!</div>
-
-<!-- ENVELOPE (hidden for now) -->
-<div class="envelope-wrapper">
-  <div id="envelope" class="close">
-    <div class="front flap"></div>
-    <div class="front bottom"></div>
-    <div class="letter">
-      <div class="words line1"><h1>You've got mail ❤️</h1></div>
-      <div class="words line2"><h1>Our date awaits!</h1></div>
-      <div class="words line3"><h4>Made with ❤️</h4></div>
-    </div>
-  </div>
-</div>
 
 <!-- HEART BUTTON -->
 <div class="heart-button" id="reveal-btn">
@@ -261,6 +274,17 @@ html, body {
   </svg>
 </div>
 
+<!-- ENVELOPE -->
+<div class="envelope-wrapper" id="envelope-wrapper">
+  <div id="envelope">
+    <div class="letter" id="letter">
+      <h1>You're invited! ❤️</h1>
+      <h4>Made with love</h4>
+    </div>
+  </div>
+  <div class="envelope-text">Click me!</div>
+</div>
+
 <script>
 /* HEART SPAWNER */
 const paper = d3.select("#canvas");
@@ -270,53 +294,53 @@ let h = window.innerHeight;
 function spawnHeart() {
   const x = Math.random() * (w - 120) + 60;
   const y = Math.random() * (h - 120) + 60;
-
   const heart = paper.append("use")
     .attr("xlink:href", "#heart")
     .attr("transform", `translate(${x}, ${y})`);
-
   const s = Math.random() * 0.5 + 0.6;
-  const tl = new TimelineMax({
-    onComplete: () => heart.remove()
-  });
-
-  tl.fromTo(heart, 0.6,
-      { scale: 0, transformOrigin: "50% 50%" },
-      { scale: s, transformOrigin: "50% 50%" }
-    )
+  const tl = new TimelineMax({ onComplete: () => heart.remove() });
+  tl.fromTo(heart, 0.6, { scale: 0, transformOrigin: "50% 50%" }, { scale: s, transformOrigin: "50% 50%" })
     .to(heart, 0.6, { scale: 1.1 })
     .to(heart, 0.4, { opacity: 0 });
 }
 
 setInterval(spawnHeart, 450);
+window.addEventListener("resize", () => { w = window.innerWidth; h = window.innerHeight; });
 
-window.addEventListener("resize", () => {
-  w = window.innerWidth;
-  h = window.innerHeight;
-});
-
-/* CURTAIN BUTTON LOGIC WITH RESET */
+/* CURTAIN BUTTON LOGIC */
 let revealed = false;
 
-$("#reveal-btn").on("click", function(e) {
-  e.stopPropagation(); // prevent immediate reset
+$("#reveal-btn").on("click", function(e){
+  e.stopPropagation();
   const tl = new TimelineMax();
   tl.to(".curtain", 1, { top: "0%", ease: Power2.easeInOut })
     .to("#reveal-btn", 0.5, { autoAlpha: 0 }, "-=0.8")
-    .to(".final-message", 0.5, { display: "block", autoAlpha: 1, ease: Power2.easeInOut });
+    .to(".final-message", 0.5, { display: "block", autoAlpha: 1, ease: Power2.easeInOut })
+    .eventCallback("onComplete", () => {
+      // show envelope after curtain
+      $("#envelope-wrapper").css("display","block");
+    });
   revealed = true;
 });
 
-// TOUCH OR CLICK RESET
+// CLICK TO RESET
 $("body").on("click touchstart", function(e){
-  if(revealed) {
+  if(revealed && !$(e.target).closest("#envelope").length){
     $(".curtain").css("top","-100%");
     $("#reveal-btn").css("display","flex");
     $(".final-message").css("display","none");
+    $("#envelope-wrapper").css("display","none");
+    $("#envelope").removeClass("open");
+    $("#letter").removeClass("visible");
     revealed = false;
   }
 });
-</script>
 
+// CLICK ENVELOPE TO OPEN
+$("#envelope-wrapper").on("click", function(e){
+  $("#envelope").addClass("open");
+  $("#letter").addClass("visible");
+});
+</script>
 </body>
 </html>
